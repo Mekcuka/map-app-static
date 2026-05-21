@@ -10,7 +10,6 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow: hidden; background: #f1f5f9; }
         .app { display: flex; height: 100vh; }
 
-        /* LEFT SIDEBAR — Tools */
         .sidebar-left {
             width: 300px; background: white; border-right: 1px solid #e2e8f0;
             display: flex; flex-direction: column; z-index: 1000;
@@ -23,7 +22,6 @@
         }
         .sidebar-header h1 { font-size: 1rem; font-weight: 600; }
         .sidebar-header p { font-size: 0.7rem; opacity: 0.7; margin-top: 0.15rem; }
-
         .sidebar-body {
             flex: 1; overflow-y: auto; padding: 0.75rem;
             display: flex; flex-direction: column; gap: 0.6rem;
@@ -97,7 +95,6 @@
         .hint.success { border-left-color: #10b981; }
         .hint.warning { border-left-color: #f59e0b; }
 
-        /* Type picker */
         .type-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem;
         }
@@ -133,7 +130,6 @@
         .toggle-row input[type="checkbox"]:checked { background: #3b82f6; }
         .toggle-row input[type="checkbox"]:checked::after { transform: translateX(0.75rem); }
 
-        /* RIGHT SIDEBAR — Lists */
         .sidebar-right {
             width: 280px; background: white; border-left: 1px solid #e2e8f0;
             display: flex; flex-direction: column; z-index: 1000;
@@ -142,7 +138,7 @@
         .sidebar-right .sidebar-header { background: #f8fafc; color: #1e293b; }
         .sidebar-right .sidebar-header h1 { font-size: 0.9rem; }
 
-        .list { display: flex; flex-direction: column; gap: 0.25rem; overflow-y: auto; }
+        .list { display: flex; flex-direction: column; gap: 0.25rem; }
         .list-item {
             display: flex; align-items: center; justify-content: space-between;
             padding: 0.45rem 0.6rem; background: #f8fafc; border-radius: 6px;
@@ -160,11 +156,9 @@
         .list-item .actions button:hover { background: rgba(0,0,0,0.05); }
         .list-empty { font-size: 0.72rem; color: #94a3b8; text-align: center; padding: 0.6rem; }
 
-        /* MAP */
         .map-wrap { flex: 1; position: relative; min-width: 0; }
         #map { width: 100%; height: 100%; }
 
-        /* FLOATING UI */
         .fab-mode {
             position: absolute; top: 12px; left: 12px; z-index: 1000;
             background: white; padding: 0.35rem 0.8rem; border-radius: 8px;
@@ -183,7 +177,6 @@
         }
         .toast.show { opacity: 1; }
 
-        /* MODAL */
         .modal-overlay {
             position: fixed; inset: 0; z-index: 2000;
             background: rgba(0,0,0,0.4); display: none;
@@ -215,7 +208,6 @@
         }
         .modal-footer .btn { width: auto; }
 
-        /* Leaflet custom markers */
         .custom-marker {
             display: flex; align-items: center; justify-content: center;
             font-size: 1.6rem; line-height: 1;
@@ -224,6 +216,21 @@
         }
         .custom-marker:hover { transform: scale(1.15); }
         .marker-selected .custom-marker { transform: scale(1.25); filter: drop-shadow(0 0 6px #10b981); }
+
+        .preview-marker {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; line-height: 1;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+            opacity: 0.85;
+            pointer-events: none;
+        }
+        .preview-pipe-end {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+            opacity: 0.85;
+            pointer-events: none;
+        }
 
         .pipe-label {
             background: rgba(37,99,235,0.95) !important;
@@ -240,48 +247,38 @@
 </head>
 <body>
     <div class="app">
-        <!-- LEFT SIDEBAR — Tools -->
         <div class="sidebar-left">
             <div class="sidebar-header">
                 <h1>🗺️ Карта трубопроводов</h1>
                 <p>Планирование и редактирование сетей</p>
             </div>
-
             <div class="sidebar-body">
-                <!-- Mode Switch -->
                 <div class="mode-switch">
                     <button class="btn active" id="btnView" onclick="setMode('view')">👁️ Просмотр</button>
                     <button class="btn" id="btnEdit" onclick="setMode('edit')">✏️ Редактор</button>
                 </div>
 
-                <!-- ADD PANEL -->
                 <div class="card" id="cardAdd">
                     <div class="card-header">➕ Добавить на карту</div>
                     <div class="card-body">
                         <div class="type-grid">
                             <div class="type-item active" data-type="station" onclick="selectAddType('station', this)">
-                                <span class="icon">🏭</span>
-                                <span>Станция</span>
+                                <span class="icon">🏭</span><span>Станция</span>
                             </div>
                             <div class="type-item" data-type="pump" onclick="selectAddType('pump', this)">
-                                <span class="icon">⚙️</span>
-                                <span>Насос</span>
+                                <span class="icon">⚙️</span><span>Насос</span>
                             </div>
                             <div class="type-item" data-type="valve" onclick="selectAddType('valve', this)">
-                                <span class="icon">🚧</span>
-                                <span>Задвижка</span>
+                                <span class="icon">🚧</span><span>Задвижка</span>
                             </div>
                             <div class="type-item" data-type="tank" onclick="selectAddType('tank', this)">
-                                <span class="icon">🛢️</span>
-                                <span>Резервуар</span>
+                                <span class="icon">🛢️</span><span>Резервуар</span>
                             </div>
                             <div class="type-item" data-type="meter" onclick="selectAddType('meter', this)">
-                                <span class="icon">📊</span>
-                                <span>Счётчик</span>
+                                <span class="icon">📊</span><span>Счётчик</span>
                             </div>
                             <div class="type-item" data-type="pipe" onclick="selectAddType('pipe', this)">
-                                <span class="icon">🔧</span>
-                                <span>Труба</span>
+                                <span class="icon">🔧</span><span>Труба</span>
                             </div>
                         </div>
                         <button class="btn btn-primary" style="margin-top:0.5rem;" id="btnAddClick" onclick="toggleAddClick()">🖱️ Разместить на карте</button>
@@ -289,29 +286,18 @@
                     </div>
                 </div>
 
-                <!-- Edit Object -->
                 <div class="card" id="cardEdit" style="display:none;">
                     <div class="card-header">✏️ Редактировать объект</div>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label>Название</label>
-                            <input type="text" id="editName">
-                        </div>
-                        <div class="form-group">
-                            <label>Широта, °</label>
-                            <input type="text" id="editLat" readonly style="background:#f8fafc;">
-                        </div>
-                        <div class="form-group">
-                            <label>Долгота, °</label>
-                            <input type="text" id="editLng" readonly style="background:#f8fafc;">
-                        </div>
+                        <div class="form-group"><label>Название</label><input type="text" id="editName"></div>
+                        <div class="form-group"><label>Широта, °</label><input type="text" id="editLat" readonly style="background:#f8fafc;"></div>
+                        <div class="form-group"><label>Долгота, °</label><input type="text" id="editLng" readonly style="background:#f8fafc;"></div>
                         <button class="btn btn-success" onclick="saveEdit()">💾 Сохранить</button>
                         <button class="btn btn-ghost" style="margin-top:0.25rem;" onclick="cancelEdit()">❌ Отменить выбор</button>
                         <div class="hint success">Перетащите объект мышью прямо на карте</div>
                     </div>
                 </div>
 
-                <!-- Layers -->
                 <div class="card">
                     <div class="card-header">👁️ Слои</div>
                     <div class="card-body">
@@ -327,34 +313,28 @@
                     </div>
                 </div>
             </div>
-
             <div class="sidebar-footer">
                 <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить всё</button>
             </div>
         </div>
 
-        <!-- MAP -->
         <div class="map-wrap">
             <div id="map"></div>
             <div class="fab-mode view" id="fabMode">👁️ Просмотр</div>
             <div class="toast" id="toast"></div>
         </div>
 
-        <!-- RIGHT SIDEBAR — Lists -->
         <div class="sidebar-right">
             <div class="sidebar-header" style="background:#f8fafc;color:#1e293b;border-bottom:1px solid #e2e8f0;">
                 <h1>📋 Объекты и трубы</h1>
             </div>
             <div class="sidebar-body" style="padding:0.6rem;">
-                <!-- Objects List -->
                 <div class="card" style="margin-bottom:0.6rem;">
                     <div class="card-header">📦 Объекты <span style="float:right;color:#94a3b8;font-weight:400;" id="lblObjCnt">0</span></div>
                     <div class="card-body" style="padding:0.4rem;max-height:200px;overflow-y:auto;">
                         <div class="list" id="listObj"><div class="list-empty">Нет объектов</div></div>
                     </div>
                 </div>
-
-                <!-- Pipes List -->
                 <div class="card">
                     <div class="card-header">🔧 Трубопроводы <span style="float:right;color:#94a3b8;font-weight:400;" id="lblPipeCnt">0</span></div>
                     <div class="card-body" style="padding:0.4rem;max-height:200px;overflow-y:auto;">
@@ -365,7 +345,6 @@
         </div>
     </div>
 
-    <!-- MODAL: Pipe Params -->
     <div class="modal-overlay" id="modalPipe">
         <div class="modal">
             <div class="modal-header">
@@ -373,27 +352,12 @@
                 <button class="close" onclick="closeModal('modalPipe')">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Название</label>
-                    <input type="text" id="pipeName" placeholder="Автонумерация">
-                </div>
-                <div class="form-group">
-                    <label>От объекта</label>
-                    <input type="text" id="pipeFrom" readonly style="background:#f8fafc;">
-                </div>
-                <div class="form-group">
-                    <label>До объекта</label>
-                    <input type="text" id="pipeTo" readonly style="background:#f8fafc;">
-                </div>
+                <div class="form-group"><label>Название</label><input type="text" id="pipeName" placeholder="Автонумерация"></div>
+                <div class="form-group"><label>От объекта</label><input type="text" id="pipeFrom" readonly style="background:#f8fafc;"></div>
+                <div class="form-group"><label>До объекта</label><input type="text" id="pipeTo" readonly style="background:#f8fafc;"></div>
                 <div style="display:flex;gap:0.5rem;">
-                    <div class="form-group" style="flex:1;">
-                        <label>Внешний ⌀, мм</label>
-                        <input type="number" id="pipeOuter" placeholder="500">
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label>Внутренний ⌀, мм</label>
-                        <input type="number" id="pipeInner" placeholder="480">
-                    </div>
+                    <div class="form-group" style="flex:1;"><label>Внешний ⌀, мм</label><input type="number" id="pipeOuter" placeholder="500"></div>
+                    <div class="form-group" style="flex:1;"><label>Внутренний ⌀, мм</label><input type="number" id="pipeInner" placeholder="480"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -403,7 +367,6 @@
         </div>
     </div>
 
-    <!-- MODAL: Edit Pipe -->
     <div class="modal-overlay" id="modalEditPipe">
         <div class="modal">
             <div class="modal-header">
@@ -411,19 +374,10 @@
                 <button class="close" onclick="closeModal('modalEditPipe')">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Название</label>
-                    <input type="text" id="epName">
-                </div>
+                <div class="form-group"><label>Название</label><input type="text" id="epName"></div>
                 <div style="display:flex;gap:0.5rem;">
-                    <div class="form-group" style="flex:1;">
-                        <label>Внешний ⌀, мм</label>
-                        <input type="number" id="epOuter">
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label>Внутренний ⌀, мм</label>
-                        <input type="number" id="epInner">
-                    </div>
+                    <div class="form-group" style="flex:1;"><label>Внешний ⌀, мм</label><input type="number" id="epOuter"></div>
+                    <div class="form-group" style="flex:1;"><label>Внутренний ⌀, мм</label><input type="number" id="epInner"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -436,7 +390,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // === STATE ===
         let objects = [], connections = [];
         let objIdSeq = 0, pipeIdSeq = 0;
         let selObjId = null, selPipeId = null;
@@ -444,8 +397,14 @@
         let addType = 'station';
         let addClick = false;
         let pipeFrom = null, pipeTo = null;
+        let pipeWaypoints = [];
         let dragObj = null, dragWp = null, dragWpPipe = null;
         let showMap = true, showObj = true, showPipe = true;
+
+        let previewMarker = null;
+        let previewLine = null;
+        let previewEndMarker = null;
+        let previewWpMarkers = [];
 
         const TYPE_NAMES = {
             station: 'Станция', pump: 'Насос', valve: 'Задвижка',
@@ -456,7 +415,6 @@
             tank: '🛢️', meter: '📊'
         };
 
-        // === MAP ===
         const map = L.map('map', { zoomControl: false }).setView([55.7558, 37.6173], 15);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -466,7 +424,6 @@
 
         let objLayer = null, pipeLayer = null;
 
-        // === HELPERS ===
         function uid() { return ++objIdSeq; }
         function puid() { return ++pipeIdSeq; }
 
@@ -487,7 +444,63 @@
         function openModal(id) { document.getElementById(id).classList.add('show'); }
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
-        // === RENDER ===
+        function clearPreview() {
+            if (previewMarker) { map.removeLayer(previewMarker); previewMarker = null; }
+            if (previewLine) { map.removeLayer(previewLine); previewLine = null; }
+            if (previewEndMarker) { map.removeLayer(previewEndMarker); previewEndMarker = null; }
+            previewWpMarkers.forEach(m => map.removeLayer(m));
+            previewWpMarkers = [];
+        }
+
+        function makePreviewIcon(iconChar) {
+            return L.divIcon({
+                html: `<div class="preview-marker">${iconChar}</div>`,
+                className: '', iconSize: [36, 36], iconAnchor: [18, 18]
+            });
+        }
+        function makePreviewEndIcon() {
+            return L.divIcon({
+                html: `<div class="preview-pipe-end">🔧</div>`,
+                className: '', iconSize: [28, 28], iconAnchor: [14, 14]
+            });
+        }
+
+        function showObjectPreview(lat, lng) {
+            if (!previewMarker) {
+                previewMarker = L.marker([lat, lng], { icon: makePreviewIcon(TYPE_ICONS[addType] || '📍'), interactive: false, zIndexOffset: 9999 }).addTo(map);
+            } else {
+                previewMarker.setLatLng([lat, lng]);
+                previewMarker.setIcon(makePreviewIcon(TYPE_ICONS[addType] || '📍'));
+            }
+        }
+
+        function updatePipePreview(cursorLat, cursorLng) {
+            if (!pipeFrom) return;
+            const pts = [pipeFrom.center, ...pipeWaypoints, [cursorLat, cursorLng]];
+            if (!previewLine) {
+                previewLine = L.polyline(pts, { color: '#3b82f6', weight: 4, opacity: 0.6, dashArray: '8,6', interactive: false }).addTo(map);
+            } else {
+                previewLine.setLatLngs(pts);
+            }
+            if (!previewEndMarker) {
+                previewEndMarker = L.marker([cursorLat, cursorLng], { icon: makePreviewEndIcon(), interactive: false, zIndexOffset: 9998 }).addTo(map);
+            } else {
+                previewEndMarker.setLatLng([cursorLat, cursorLng]);
+            }
+        }
+
+        function renderWpMarkers() {
+            previewWpMarkers.forEach(m => map.removeLayer(m));
+            previewWpMarkers = [];
+            pipeWaypoints.forEach(wp => {
+                const m = L.circleMarker(wp, {
+                    radius: 4, color: '#2563eb', fillColor: '#93c5fd',
+                    fillOpacity: 0.9, weight: 2, interactive: false
+                }).addTo(map);
+                previewWpMarkers.push(m);
+            });
+        }
+
         function renderObjects() {
             if (objLayer) { map.removeLayer(objLayer); objLayer = null; }
             if (!showObj || objects.length === 0) return;
@@ -567,19 +580,32 @@
             pipeLayer.addTo(map);
         }
 
-        // === ADD OBJECT ===
         function selectAddType(type, el) {
             addType = type;
             document.querySelectorAll('.type-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            if (addClick) updateHint();
+            if (addClick) {
+                updateHint();
+                if (addType !== 'pipe' && previewMarker) {
+                    previewMarker.setIcon(makePreviewIcon(TYPE_ICONS[addType] || '📍'));
+                }
+                if (addType === 'pipe') {
+                    clearPreview();
+                }
+            }
         }
         function updateHint() {
             const hint = document.getElementById('addHint');
             hint.style.display = 'block';
-            hint.textContent = addType === 'pipe'
-                ? '👆 Кликните на первый объект, затем на второй'
-                : '👆 Кликните на карту, чтобы разместить объект';
+            if (addType === 'pipe') {
+                if (!pipeFrom) {
+                    hint.textContent = '👆 Кликните на объект-начало трубы';
+                } else {
+                    hint.textContent = '👆 Кликайте на карту для изгибов, затем на объект-конец. Двойной клик — конец';
+                }
+            } else {
+                hint.textContent = '👆 Кликните на карту, чтобы разместить объект';
+            }
         }
 
         function toggleAddClick() {
@@ -589,12 +615,13 @@
                 btn.className = 'btn btn-warning';
                 btn.textContent = '❌ Отменить размещение';
                 updateHint();
-                toast(addType === 'pipe' ? 'Выберите два объекта для соединения' : 'Кликните на карту для размещения');
+                toast(addType === 'pipe' ? 'Выберите начало трубы (клик на объект)' : 'Кликните на карту для размещения');
             } else {
                 btn.className = 'btn btn-primary';
                 btn.textContent = '🖱️ Разместить на карте';
                 document.getElementById('addHint').style.display = 'none';
-                pipeFrom = null; pipeTo = null;
+                pipeFrom = null; pipeTo = null; pipeWaypoints = [];
+                clearPreview();
             }
         }
 
@@ -609,11 +636,17 @@
             refreshLists(); renderObjects(); renderPipes();
         }
 
-        // === PIPE CONNECTION ===
         function handlePipeClick(o) {
-            if (!pipeFrom) { pipeFrom = o; document.getElementById('addHint').textContent = `Первый: ${o.name}. Выберите второй.`; return; }
+            if (!pipeFrom) {
+                pipeFrom = o;
+                updateHint();
+                toast(`Начало: ${o.name}. Добавляйте изгибы кликами, затем выберите конец.`);
+                return;
+            }
             if (pipeFrom.id === o.id) { toast('Выберите другой объект'); return; }
-            if (connections.some(c => (c.from === pipeFrom.id && c.to === o.id) || (c.from === o.id && c.to === pipeFrom.id))) { toast('Трубопровод уже существует'); pipeFrom = null; updateHint(); return; }
+            if (connections.some(c => (c.from === pipeFrom.id && c.to === o.id) || (c.from === o.id && c.to === pipeFrom.id))) {
+                toast('Трубопровод уже существует'); pipeFrom = null; pipeTo = null; pipeWaypoints = []; clearPreview(); updateHint(); return;
+            }
             pipeTo = o;
             document.getElementById('pipeName').value = `Труба ${pipeIdSeq + 1}`;
             document.getElementById('pipeFrom').value = pipeFrom.name;
@@ -630,18 +663,17 @@
             const idm = document.getElementById('pipeInner').value;
             connections.push({
                 id: puid(), name, from: pipeFrom.id, to: pipeTo.id,
-                pts: [pipeFrom.center, pipeTo.center], od, idm
+                pts: [pipeFrom.center, ...pipeWaypoints, pipeTo.center], od, idm
             });
             toast(`Создан ${name}`);
-            pipeFrom = null; pipeTo = null;
+            pipeFrom = null; pipeTo = null; pipeWaypoints = [];
             closeModal('modalPipe');
             toggleAddClick();
             refreshLists(); renderPipes();
         }
 
-        // === EDIT ===
         function setMode(m) {
-            mode = m; addClick = false; pipeFrom = null; pipeTo = null; dragObj = null;
+            mode = m; addClick = false; pipeFrom = null; pipeTo = null; pipeWaypoints = []; dragObj = null;
             document.getElementById('btnView').className = 'btn' + (m === 'view' ? ' active' : '');
             document.getElementById('btnEdit').className = 'btn' + (m === 'edit' ? ' active' : '');
             document.getElementById('cardAdd').style.display = m === 'view' ? 'block' : 'none';
@@ -650,6 +682,7 @@
             const btn = document.getElementById('btnAddClick');
             btn.className = 'btn btn-primary'; btn.textContent = '🖱️ Разместить на карте';
             document.getElementById('addHint').style.display = 'none';
+            clearPreview();
 
             const fab = document.getElementById('fabMode');
             fab.className = 'fab-mode ' + m;
@@ -682,7 +715,6 @@
             });
         }
 
-        // === WAYPOINTS ===
         function addWaypoint(c, latlng) {
             let pts = c.pts || [];
             if (pts.length < 2) { const f = objects.find(o => o.id === c.from), t = objects.find(o => o.id === c.to); pts = [f.center, t.center]; }
@@ -717,7 +749,6 @@
             renderPipes();
         }
 
-        // === LISTS ===
         function refreshLists() {
             document.getElementById('lblObjCnt').textContent = objects.length;
             document.getElementById('lblPipeCnt').textContent = connections.length;
@@ -751,7 +782,6 @@
         function deleteObj(id) { objects = objects.filter(o => o.id !== id); connections = connections.filter(c => c.from !== id && c.to !== id); if (selObjId === id) selObjId = null; refreshLists(); renderObjects(); renderPipes(); }
         function deletePipe(id) { connections = connections.filter(c => c.id !== id); refreshLists(); renderPipes(); }
 
-        // === LAYERS ===
         function toggleLayer(t) {
             if (t === 'map') { showMap = document.getElementById('layMap').checked; if (showMap) tileLayer.addTo(map); else map.removeLayer(tileLayer); }
             if (t === 'obj') { showObj = document.getElementById('layObj').checked; renderObjects(); }
@@ -764,23 +794,45 @@
             setMode('view'); refreshLists(); renderObjects(); renderPipes();
         }
 
-        // === MAP EVENTS ===
         map.on('click', e => {
             if (addClick && addType !== 'pipe') {
                 addObject(e.latlng.lat, e.latlng.lng, addType);
                 return;
             }
+            if (addClick && addType === 'pipe' && pipeFrom) {
+                pipeWaypoints.push([e.latlng.lat, e.latlng.lng]);
+                renderWpMarkers();
+                updatePipePreview(e.latlng.lat, e.latlng.lng);
+                toast(`Добавлен изгиб (${pipeWaypoints.length})`);
+            }
+        });
+        map.on('dblclick', e => {
+            if (addClick && addType === 'pipe' && pipeFrom) {
+                L.DomEvent.stopPropagation(e);
+                toast('Двойной клик — завершите выбор объекта-конца кликом по нему');
+            }
         });
         map.on('mousemove', e => {
-            if (dragObj) { moveObj(dragObj.id, e.latlng.lat, e.latlng.lng); renderObjects(); renderPipes(); }
-            if (dragWpPipe && dragWp !== null) { dragWpPipe.pts[dragWp] = [e.latlng.lat, e.latlng.lng]; renderPipes(); }
+            if (addClick && addType !== 'pipe' && !pipeFrom) {
+                showObjectPreview(e.latlng.lat, e.latlng.lng);
+            }
+            if (addClick && addType === 'pipe' && pipeFrom) {
+                updatePipePreview(e.latlng.lat, e.latlng.lng);
+            }
+            if (dragObj) {
+                moveObj(dragObj.id, e.latlng.lat, e.latlng.lng);
+                renderObjects(); renderPipes();
+            }
+            if (dragWpPipe && dragWp !== null) {
+                dragWpPipe.pts[dragWp] = [e.latlng.lat, e.latlng.lng];
+                renderPipes();
+            }
         });
         map.on('mouseup', () => {
             if (dragObj) { dragObj = null; map.dragging.enable(); }
             if (dragWpPipe) { dragWp = null; dragWpPipe = null; map.dragging.enable(); }
         });
 
-        // Init
         refreshLists();
     </script>
 </body>
