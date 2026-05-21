@@ -1,1 +1,23 @@
-Nothing should be ignored since only a source/config file (`vite.config.js`) was modified and no build artifacts, dependencies, or temp files were detected in the changes.
+```
+# Build artifacts
+dist/
+build/
+*.js
+*.css
+
+# Dependencies
+node_modules/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+```
